@@ -21,7 +21,7 @@ class ChannelType(enum.IntEnum):
     M_PLUS_000 = 3      # ITU M+000
     LEFT_SURROUND = 4
     M_PLUS_110 = 4      # ITU M+110
-    RIGHT_SUROUND = 5
+    RIGHT_SURROUND = 5
     M_MINUS_110 = 5     # ITU M-110
     DUAL_MONO = 6       # A channel that's counted twice
     M_PLUS_SC = 7       # ITU M+SC
