@@ -12,7 +12,12 @@ def r128_test_data(tmp_path_factory):
 
     # The latest data can be found here:
     # https://tech.ebu.ch/publications/ebu_loudness_test_set
-    url = 'https://tech.ebu.ch/files/live/sites/tech/files/shared/testmaterial/ebu-loudness-test-setv05.zip' # noqa
+
+    # I used to point to the official dataset hosted by the EBU, but they
+    # either throttled me or are getting hammered by other requests. For now, I
+    # am hosting a copy to get around the issue. If anyone has suggestions on
+    # dataset hosting for integration tests, I'm all ears.
+    url = 'https://jodh.us/export/ebu-loudness-test-setv05.zip'
     z = tmp_path_factory.getbasetemp() / 'ebu-loudness-test-setv05.zip'
 
     data = request.urlopen(url)
