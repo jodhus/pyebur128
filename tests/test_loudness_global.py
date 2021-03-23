@@ -10,14 +10,14 @@ import soundfile as sf
 def get_single_loudness(filename):
     '''Open the WAV file and get the global loudness.'''
     with sf.SoundFile(filename) as wav:
-        state = R128State(wav.channels, wav.samplerate, MeasurementMode.ModeI)
+        state = R128State(wav.channels, wav.samplerate, MeasurementMode.MODE_I)
 
         if wav.channels == 5:
-            state.set_channel(0, ChannelType.Left)
-            state.set_channel(1, ChannelType.Right)
-            state.set_channel(2, ChannelType.Center)
-            state.set_channel(3, ChannelType.LeftSurround)
-            state.set_channel(4, ChannelType.RightSuround)
+            state.set_channel(0, ChannelType.LEFT)
+            state.set_channel(1, ChannelType.RIGHT)
+            state.set_channel(2, ChannelType.CENTER)
+            state.set_channel(3, ChannelType.LEFT_SURROUND)
+            state.set_channel(4, ChannelType.RIGHT_SURROUND)
 
         for sample in wav.read():
             state.add_frames(sample, 1)

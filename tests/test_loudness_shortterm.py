@@ -11,14 +11,14 @@ def get_max_loudness_shortterm(filename):
     with sf.SoundFile(filename) as wav:
         state = R128State(wav.channels,
                           wav.samplerate,
-                          MeasurementMode.ModeS)
+                          MeasurementMode.MODE_S)
 
         if wav.channels == 5:
-            state.set_channel(0, ChannelType.Left)
-            state.set_channel(1, ChannelType.Right)
-            state.set_channel(2, ChannelType.Center)
-            state.set_channel(3, ChannelType.LeftSurround)
-            state.set_channel(4, ChannelType.RightSuround)
+            state.set_channel(0, ChannelType.LEFT)
+            state.set_channel(1, ChannelType.RIGHT)
+            state.set_channel(2, ChannelType.CENTER)
+            state.set_channel(3, ChannelType.LEFT_SURROUND)
+            state.set_channel(4, ChannelType.RIGHT_SURROUND)
 
         # 10 ms buffer / 10 Hz refresh rate.
         max_shortterm = float('-inf')
