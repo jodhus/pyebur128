@@ -2,9 +2,13 @@ name: Upload to Test PyPI
 
 on:
   workflow_dispatch:
+    inputs:
+      overrideVersion:
+        description: Manually force a version
 
 env:
   CIBW_BUILD_VERBOSITY: 1
+  SETUPTOOLS_SCM_PRETEND_VERSION: ${{ github.event.inputs.overrideVersion }}
 
 jobs:
   make_sdist:
@@ -76,11 +80,12 @@ jobs:
         uses: joerick/cibuildwheel@v1.10.0
         env:
           CIBW_BUILD: cp${{ steps.pythonversion.outputs.value }}-${{ matrix.platform_id }}
+          CIBW_ENVIRONMENT: "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}"
       - name: Upload wheels to artifact container
         uses: actions/upload-artifact@v2
         with:
           path: wheelhouse/*.whl
-  
+
   upload_all:
     needs: [build_wheels, make_sdist]
     runs-on: ubuntu-latest
