@@ -24,6 +24,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install libsndfile if necessary
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            apt install libsndfile1
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            brew install libsndfile
+          fi
+        shell: bash
       - name: Install pyebur128
         run: |
           python -m pip install --upgrade pip
