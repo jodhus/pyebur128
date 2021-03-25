@@ -6,18 +6,29 @@
 
 
 # pyebur128
-A Cython implementation of the libeur128 library for audio loudness in media files.
+A Cython implementation of the [libebur128](https://github.com/jiixyj/libebur128) library for audio loudness in media files.
+
+## Requirements
+
+* Operating Systems: Linux, macOS, or Windows
+* Python: 3.6+
+* Dependencies: None!
 
 ## Installation
 
-Working on getting wheels created/published, but for now you can easily run the following to get going:
+### PyPI
 
 ```
-python3 -m build
-pip install dist/pyebur128*.whl
+pip install pyebur128
+```
+
+### From Source
+
+```
+git clone --recurse-submodules https://github.com/jodhus/pyebur128
+cd pyebur128
+pip install .
 ```
 
 ## TODO
-1. Make a better README.md
-2. Create the docs and upload them
-3. Publish to PyPI
+* Working on getting official documentation written/uploaded. In the meantime, all definitions are documented in within their docstrings.
