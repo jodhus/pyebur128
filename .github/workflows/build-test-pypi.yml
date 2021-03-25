@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v2
+      with:
+          submodules: recursive
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
@@ -61,6 +63,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Get Python Version Name
         uses: mad9000/actions-find-and-replace-string@2
         id: pythonversion
