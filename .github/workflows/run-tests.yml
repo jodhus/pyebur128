@@ -26,11 +26,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install libsndfile if necessary (Linux)
         run: |
-          apt install libsndfile1
+          sudo apt install libsndfile1
         if: matrix.os == 'ubuntu-latest'
       - name: Install libsndfile if necessary (macOS)
         run: |
-          brew install libsndfile
+          sudo brew install libsndfile
         if: matrix.os == 'macos-latest'
       - name: Install pyebur128
         run: |
