@@ -1,0 +1,94 @@
+name: Upload to Test PyPI
+
+on:
+  workflow_dispatch:
+
+env:
+  CIBW_BUILD_VERBOSITY: 1
+
+jobs:
+  make_sdist:
+    name: Make SDist
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install build twine
+    - name: Build SDist
+      run: |
+        python -m build --sdist
+    - name: Put SDist in artifact container
+      uses: actions/upload-artifact@v2
+      with:
+        path: dist/*.tar.gz
+    - name: Check SDist metadata
+      run: |
+        twine check dist/*
+
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        bitness: [32, 64]
+        python: [3.6, 3.7, 3.8, 3.9]
+        include:
+          - os: windows-latest
+            bitness: 64
+            platform_id: win_amd64
+          - os: windows-latest
+            bitness: 32
+            platform_id: win32
+          - os: ubuntu-latest
+            bitness: 64
+            platform_id: manylinux_x86_64
+          - os: ubuntu-latest
+            bitness: 32
+            platform_id: manylinux_i686
+          - os: macos-latest
+            bitness: 64
+            platform_id: macosx_x86_64
+        exclude:
+          - os: macos-latest
+            bitness: 32
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Get Python Version Name
+        uses: mad9000/actions-find-and-replace-string@2
+        id: pythonversion
+        with:
+          source: ${{ matrix.python }}
+          find: '.'
+          replace: ''
+      - name: Build wheels
+        uses: joerick/cibuildwheel@v1.10.0
+        env:
+          CIBW_BUILD: cp${{ steps.pythonversion.outputs.value }}-${{ matrix.platform_id }}
+      - name: Upload wheels to artifact container
+        uses: actions/upload-artifact@v2
+        with:
+          path: wheelhouse/*.whl
+  
+  upload_all:
+    needs: [build_wheels, make_sdist]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get SDist and wheels from artifact container
+      uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: dist
+    - name: Publish wheels to Test PyPI
+      uses: pypa/gh-action-pypi-publish@v1.4.2
+      with:
+        user: ${{ secrets.TEST_PYPI_USERNAME }}
+        password: ${{ secrets.TEST_PYPI_PASSWORD }}
+        repository_url: https://test.pypi.org/legacy/
