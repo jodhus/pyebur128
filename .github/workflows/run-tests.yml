@@ -30,7 +30,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
       - name: Install libsndfile if necessary (macOS)
         run: |
-          sudo brew install libsndfile
+          brew install libsndfile
         if: matrix.os == 'macos-latest'
       - name: Install pyebur128
         run: |
