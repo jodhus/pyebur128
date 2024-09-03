@@ -16,11 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout the repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
           submodules: recursive
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: '3.8'
     - name: Install dependencies
@@ -30,7 +30,7 @@ jobs:
       run: |
         python -m build --sdist
     - name: Put SDist in artifact container
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         path: dist/*.tar.gz
     - name: Check SDist metadata
@@ -44,7 +44,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         bitness: [32, 64]
-        python: [3.6, 3.7, 3.8, 3.9]
+        python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         include:
           - os: windows-latest
             bitness: 64
@@ -66,23 +66,23 @@ jobs:
             bitness: 32
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Get Python Version Name
-        uses: mad9000/actions-find-and-replace-string@2
+        uses: mad9000/actions-find-and-replace-string@5
         id: pythonversion
         with:
           source: ${{ matrix.python }}
           find: '.'
           replace: ''
       - name: Build wheels
-        uses: joerick/cibuildwheel@v1.10.0
+        uses: joerick/cibuildwheel@v2.20.0
         env:
           CIBW_BUILD: cp${{ steps.pythonversion.outputs.value }}-${{ matrix.platform_id }}
           CIBW_ENVIRONMENT: "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}"
       - name: Upload wheels to artifact container
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           path: wheelhouse/*.whl
 
@@ -91,12 +91,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get SDist and wheels from artifact container
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: artifact
         path: dist
     - name: Publish wheels to Test PyPI
-      uses: pypa/gh-action-pypi-publish@v1.4.2
+      uses: pypa/gh-action-pypi-publish@v1.10.1
       with:
         user: ${{ secrets.PYPI_USERNAME }}
         password: ${{ secrets.PYPI_PASSWORD }}
