@@ -46,8 +46,8 @@ jobs:
       - name: Upload coverage to Codecov.io
         run: |
           bash <(curl -s https://codecov.io/bash)
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == "3.12" }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12' }}
       - uses: actions/upload-artifact@v2
         with:
           path: coverage.xml
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == "3.12" }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12' }}
