@@ -16,7 +16,7 @@ jobs:
   build:
     strategy:
       matrix:
-        python-version: [3.8, 3.9, 3.10, 3.11, 3.12]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -46,8 +46,8 @@ jobs:
       - name: Upload coverage to Codecov.io
         run: |
           bash <(curl -s https://codecov.io/bash)
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == '3.9' }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == "3.12" }}
       - uses: actions/upload-artifact@v2
         with:
           path: coverage.xml
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == '3.9' }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.python-version == "3.12" }}
