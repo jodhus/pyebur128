@@ -1,4 +1,4 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jodhus/pyebur128/Run%20tests)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jodhus/pyebur128/run-tests.yml?branch=main)
 [![codecov](https://codecov.io/gh/jodhus/pyebur128/branch/master/graph/badge.svg?token=TLA2NXMEF4)](https://codecov.io/gh/jodhus/pyebur128)
 ![GitHub](https://img.shields.io/github/license/jodhus/pyebur128)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyebur128)
@@ -11,7 +11,7 @@ A Cython implementation of the [libebur128](https://github.com/jiixyj/libebur128
 ## Requirements
 
 * Operating Systems: Linux, macOS, or Windows
-* Python: 3.6+
+* Python: 3.8+
 * Dependencies: None!
 
 ## Installation
