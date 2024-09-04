@@ -7,6 +7,26 @@ requires = [
 ]
 build-backend = 'setuptools.build_meta'
 
+[tool.cibuildwheel]
+test-command = 'pytest {package}/tests'
+test-extras = ['tests']
+
+[tool.cibuildwheel.linux]
+archs = ['auto', 'aarch64', 'ppc64le', 's390x']
+before-test = "yum -y install libsndfile"
+
+[tool.cibuildwheel.macos]
+before-test = "brew install libsndfile"
+
+#[tool.cibuildwheel.windows]
+# Will re-enable ARM64 once libebur128 pull request #131 is merged.
+# https://github.com/jiixyj/libebur128/pull/131
+#archs = ['auto', 'ARM64']
+
+[[tool.cibuildwheel.overrides]]
+select = '*-musllinux*'
+before-test = "apk add libsndfile"
+
 [tool.pytest.ini_options]
 minversion = '6.0'
 addopts = '--cov-report=xml --cov-report=term:skip-covered --cov=pyebur128'
