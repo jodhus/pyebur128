@@ -43,32 +43,19 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
-        archs: ["x86_64, i686", "aarch64"]
-        build: ["manylinux", "musllinux"]
         python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        include:
-          - os: windows-latest
-            archs: "AMD64"
-          - os: windows-latest
-            archs: "x86"
-          - os: windows-latest
-            archs: "ARM64"
-          - os: macos-13
-            archs: "x86_64"
-          - os: macos-14
-            archs: "arm64"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      #- name: Get Python Version Name
-      #  uses: mad9000/actions-find-and-replace-string@5
-      #  id: pythonversion
-      #  with:
-      #    source: ${{ matrix.python }}
-      #    find: '.'
-      #    replace: ''
+      - name: Get Python Version Name
+        uses: mad9000/actions-find-and-replace-string@5
+        id: pythonversion
+        with:
+          source: ${{ matrix.python }}
+          find: '.'
+          replace: ''
       - name: "Install Python 3.8 universal2 on macOS arm64"
         if: runner.os == 'macOS' && runner.arch == 'arm64'
         uses: actions/setup-python@v5
@@ -80,7 +67,7 @@ jobs:
         uses: joerick/cibuildwheel@v2.20.0
         env:
           CIBW_ARCHS: "${{ matrix.archs }}"
-          CIBW_BUILD: "${{ matrix.build && '*-' || ''}}${{ matrix.build }}*"
+          CIBW_BUILD: "cp${{ steps.pythonversion.outputs.value }}-*"
           CIBW_ENVIRONMENT: "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}"
       - name: Upload wheels to artifact container
         uses: actions/upload-artifact@v4
