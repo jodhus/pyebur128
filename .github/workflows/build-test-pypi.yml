@@ -78,6 +78,8 @@ jobs:
           #CIBW_ARCHS_WINDOWS: "auto ARM64"
           CIBW_BUILD: "cp${{ steps.pythonversion.outputs.value }}-*"
           CIBW_ENVIRONMENT: "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}"
+          CIBW_TEST_COMMAND: pytest {package}/tests
+          CIBW_TEST_EXTRAS: "tests"
       - name: Upload wheels to artifact container
         uses: actions/upload-artifact@v4
         with:
