@@ -42,44 +42,45 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        bitness: [32, 64]
+        os: [ubuntu-latest]
+        archs: ["x86_64, i686", "aarch64", "ppc64le", "s390x"]
+        build: ["manylinux", "musllinux"]
         python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
         include:
           - os: windows-latest
-            bitness: 64
-            platform_id: win_amd64
+            archs: "AMD64"
           - os: windows-latest
-            bitness: 32
-            platform_id: win32
-          - os: ubuntu-latest
-            bitness: 64
-            platform_id: manylinux_x86_64
-          - os: ubuntu-latest
-            bitness: 32
-            platform_id: manylinux_i686
-          - os: macos-latest
-            bitness: 64
-            platform_id: macosx_x86_64
-        exclude:
-          - os: macos-latest
-            bitness: 32
+            archs: "x86"
+          - os: windows-latest
+            archs: "ARM64"
+          - os: macos-13
+            archs: "x86_64"
+          - os: macos-14
+            archs: "arm64"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Get Python Version Name
-        uses: mad9000/actions-find-and-replace-string@5
-        id: pythonversion
+      #- name: Get Python Version Name
+      #  uses: mad9000/actions-find-and-replace-string@5
+      #  id: pythonversion
+      #  with:
+      #    source: ${{ matrix.python }}
+      #    find: '.'
+      #    replace: ''
+      - name: "Install Python 3.8 universal2 on macOS arm64"
+        if: runner.os == 'macOS' && runner.arch == 'arm64'
+        uses: actions/setup-python@v5
+        env:
+          PIP_DISABLE_PIP_VERSION_CHECK: 1
         with:
-          source: ${{ matrix.python }}
-          find: '.'
-          replace: ''
+          python-version: 3.8
       - name: Build wheels
         uses: joerick/cibuildwheel@v2.20.0
         env:
-          CIBW_BUILD: cp${{ steps.pythonversion.outputs.value }}-${{ matrix.platform_id }}
+          CIBW_ARCHS: "${{ matrix.archs }}"
+          CIBW_BUILD: "${{ matrix.build && '*-' || ''}}${{ matrix.build }}*"
           CIBW_ENVIRONMENT: "SETUPTOOLS_SCM_PRETEND_VERSION=${{ github.event.inputs.overrideVersion }}"
       - name: Upload wheels to artifact container
         uses: actions/upload-artifact@v4
