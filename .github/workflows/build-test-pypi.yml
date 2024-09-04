@@ -43,20 +43,20 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
-        archs: ["x86_64, i686", "arm64"]
+        archs: ["x86_64, i686", "aarch64"]
         build: ["manylinux", "musllinux"]
         python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        #include:
-        #  - os: windows-latest
-        #    archs: "AMD64"
-        #  - os: windows-latest
-        #    archs: "x86"
-        #  - os: windows-latest
-        #    archs: "ARM64"
-        #  - os: macos-13
-        #    archs: "x86_64"
-        #  - os: macos-14
-        #    archs: "arm64"
+        include:
+          - os: windows-latest
+            archs: "AMD64"
+          - os: windows-latest
+            archs: "x86"
+          - os: windows-latest
+            archs: "ARM64"
+          - os: macos-13
+            archs: "x86_64"
+          - os: macos-14
+            archs: "arm64"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
