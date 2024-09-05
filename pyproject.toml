@@ -20,7 +20,11 @@ before-test = "brew install libsndfile"
 
 [[tool.cibuildwheel.overrides]]
 select = '*-musllinux*'
-before-test = ['apk add libsndfile', 'find / | grep libsndfile']
+before-test = [
+    'apk add libsndfile',
+    'PYVER=`python -c "import sys; print(\".\".join(map(str, sys.version_info[:2])))"`',
+    'sed -i "192b1; b ;:1;s/_explicit_libname/\"\/usr\/lib\/libsndfile.so.1.0.37\"/g" $VIRTUAL_ENV/lib/python$PYVER/site-packages/soundfile.py',
+]
 
 [tool.pytest.ini_options]
 minversion = '6.0'
