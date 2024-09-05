@@ -1,10 +1,5 @@
 [build-system]
-requires = [
-    'wheel',
-    'setuptools',
-    'Cython',
-    'setuptools_scm[toml]',
-]
+requires = ['wheel', 'setuptools', 'Cython', 'setuptools_scm[toml]']
 build-backend = 'setuptools.build_meta'
 
 [tool.cibuildwheel]
@@ -25,7 +20,7 @@ before-test = "brew install libsndfile"
 
 [[tool.cibuildwheel.overrides]]
 select = '*-musllinux*'
-before-test = "apk add libsndfile"
+before-test = ['apk add libsndfile', 'find / | grep libsndfile']
 
 [tool.pytest.ini_options]
 minversion = '6.0'
