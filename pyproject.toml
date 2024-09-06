@@ -16,9 +16,9 @@ before-test = "yum -y install libsndfile"
 [tool.cibuildwheel.macos]
 before-test = "brew install libsndfile"
 
-#[tool.cibuildwheel.windows]
-# Will re-enable ARM64 once libebur128 pull request #131 is merged.
+# Will re-enable Windows ARM64 once libebur128 pull request #131 is merged.
 # https://github.com/jiixyj/libebur128/pull/131
+#[tool.cibuildwheel.windows]
 #archs = ['auto', 'ARM64']
 
 [[tool.cibuildwheel.overrides]]
@@ -32,7 +32,7 @@ before-test = [
     'apk add libsndfile',
     'pip install soundfile',
     'PYVER=`python -c "import sys; print(\".\".join(map(str, sys.version_info[:2])))"`',
-    'sed -i "192b1; b ;:1;s/_explicit_libname/\"\/usr\/lib\/libsndfile.so.1.0.37\"/g" $VIRTUAL_ENV/lib/python$PYVER/site-packages/soundfile.py',
+    'sed -i "192b1; b ;:1;s/_explicit_libname/\"\/usr\/lib\/libsndfile.so.1\"/g" $VIRTUAL_ENV/lib/python$PYVER/site-packages/soundfile.py',
 ]
 
 [tool.pytest.ini_options]
