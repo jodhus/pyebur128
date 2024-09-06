@@ -2,6 +2,15 @@
 
 ## [Unreleased] - ??-??-????
 
+## [0.1.1] - 2024-09-06
+### Changed
+* Base Python version is now 3.8.
+* Supports up to Python 3.12
+* Now builds for most other supported architectures. (Windows ARM64 disabled for now)
+
+### Fixed
+* Removed MSVC check due to setuptools deprecating more of distutils functions. (#1)
+
 ## [0.1.0] - 2021-03-25
 ### Added
 * First release!
